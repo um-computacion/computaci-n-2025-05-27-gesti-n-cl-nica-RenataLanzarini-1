@@ -57,3 +57,41 @@ class Clinica:
         medico = self.__medicos[matricula]
         receta = Receta(paciente, medico, medicamentos)
         self.__historias_clinicas[dni].agregar_receta(receta)
+
+    def obtener_pacientes(self) -> list[Paciente]:
+        return list(self.__pacientes.values())
+
+    def obtener_medicos(self) -> list[Medico]:
+        return list(self.__medicos.values())
+
+    def obtener_medico_por_matricula(self, matricula: str) -> Medico:
+        self.validar_existencia_medico(matricula)
+        return self.__medicos[matricula]
+
+    def obtener_turnos(self) -> list[Turno]:
+        return self.__turnos.copy()
+
+    def obtener_historia_clinica_por_dni(self, dni: str) -> HistoriaClinica:
+        self.validar_existencia_paciente(dni)
+        return self.__historias_clinicas[dni]
+
+    # Utilidades y validaciones
+    def validar_existencia_paciente(self, dni: str):
+        if dni not in self.__pacientes:
+            raise PacienteNoEncontradoException(f"No se encontró paciente con DNI {dni}.")
+
+    def validar_existencia_medico(self, matricula: str):
+        if matricula not in self.__medicos:
+            raise MedicoNoDisponibleException(f"No se encontró médico con matrícula {matricula}.")
+
+    def validar_turno_no_duplicado(self, matricula: str, fecha_hora: datetime):
+        for turno in self.__turnos:
+            if (
+                turno.obtener_medico().obtener_matricula() == matricula
+                and turno.obtener_fecha_hora() == fecha_hora
+            ):
+                raise TurnoOcupadoException("El médico ya tiene un turno agendado en esa fecha y hora.")
+
+    def obtener_dia_semana_en_espanol(self, fecha_hora: datetime) -> str:
+        dias = ["lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"]
+        return dias[fecha_hora.weekday()]
