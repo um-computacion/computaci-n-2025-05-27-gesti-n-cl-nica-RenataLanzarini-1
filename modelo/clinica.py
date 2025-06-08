@@ -95,7 +95,8 @@ class Clinica:
     def obtener_dia_semana_en_espanol(self, fecha_hora: datetime) -> str:
         dias = ["lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"]
         return dias[fecha_hora.weekday()]
-        def obtener_especialidad_disponible(self, medico: Medico, dia_semana: str) -> str | None:
+        
+    def obtener_especialidad_disponible(self, medico: Medico, dia_semana: str) -> str | None:
         return medico.obtener_especialidad_para_dia(dia_semana)
 
     def validar_especialidad_en_dia(self, medico: Medico, especialidad_solicitada: str, dia_semana: str):
