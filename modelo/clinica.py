@@ -95,3 +95,14 @@ class Clinica:
     def obtener_dia_semana_en_espanol(self, fecha_hora: datetime) -> str:
         dias = ["lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"]
         return dias[fecha_hora.weekday()]
+        def obtener_especialidad_disponible(self, medico: Medico, dia_semana: str) -> str | None:
+        return medico.obtener_especialidad_para_dia(dia_semana)
+
+    def validar_especialidad_en_dia(self, medico: Medico, especialidad_solicitada: str, dia_semana: str):
+        especialidad_del_dia = self.obtener_especialidad_disponible(medico, dia_semana)
+        if especialidad_del_dia is None:
+            raise MedicoNoDisponibleException(f"El médico no atiende ningún día los {dia_semana}.")
+        if especialidad_del_dia.lower() != especialidad_solicitada.lower():
+            raise MedicoNoDisponibleException(
+                f"El médico no atiende la especialidad '{especialidad_solicitada}' el día {dia_semana}."
+            )
